@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Media;
+use App\Entity\TwitterUser;
 use App\Service\MentionManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\MessageService;
@@ -54,14 +57,40 @@ class MessageController extends AbstractController
      * @Route("/mentions", name="mentions")
      * @param MessageService $message
      */
-    public function getMentions(MentionManager $mentionManager, MessageService $messageService)
+    public function getMentions(MentionManager $mentionManager,
+                                MessageService $messageService,
+                                EntityManagerInterface $entityManager)
     {
+        foreach ($mentionManager->getMentions() as $mention) {
+            $mentionMessage = $messageService->getOneById($mention->id);
+            $twitterUser    = new TwitterUser();
+            $twitterUser->setUsername($mentionMessage->user->screen_name);
+            $media         = new Media();
+            $tweetOriginal = $messageService->getOneById($mentionMessage->in_reply_to_status_id);
 
-        $mentions = $mentionManager->getMentions();
-        $mentionMessage = $messageService->getOneById($mentions[0]->id);
-        $tweetOriginal = $messageService->getOneById($mentionMessage->in_reply_to_status_id);
-        $video = $tweetOriginal->extended_entities->media[0]->video_info->variants[0];
-        dd($video->url);
-
+            if (isset($tweetOriginal->extended_entities)) {
+                if (!isset($tweetOriginal->extended_entities->media[0]->video_info)) {
+                    $media->setUrl($tweetOriginal
+                        ->extended_entities
+                        ->media[0]
+                        ->media_url_https);
+                    $media->setType(Media::TYPE_IMAGE);
+                } else {
+                    $media->setType(Media::TYPE_VIDEO);
+                    $video = $tweetOriginal
+                        ->extended_entities
+                        ->media[0]
+                        ->video_info
+                        ->variants[0];
+                    $media->setUrl($video->url);
+                }
+                    $media->setTweetIdentifier($mentionMessage->id);
+                    $media->setTwitterUser($twitterUser);
+                    $entityManager->persist($twitterUser);
+                    $entityManager->persist($media);
+            }
+        }
+        $entityManager->flush();
+        dd('ok');
     }
 }
