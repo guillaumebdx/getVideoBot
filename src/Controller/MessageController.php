@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
+use App\Service\MentionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\MessageService;
 
 /**
- * 
+ *
  * @author guillaume
  * @Route("/message", name="message_")
  *
@@ -47,5 +48,20 @@ class MessageController extends AbstractController
     public function showRetweets(MessageService $message, $id)
     {
         $message->getRetweetsById($id);
+    }
+
+    /**
+     * @Route("/mentions", name="mentions")
+     * @param MessageService $message
+     */
+    public function getMentions(MentionManager $mentionManager, MessageService $messageService)
+    {
+
+        $mentions = $mentionManager->getMentions();
+        $mentionMessage = $messageService->getOneById($mentions[0]->id);
+        $tweetOriginal = $messageService->getOneById($mentionMessage->in_reply_to_status_id);
+        $video = $tweetOriginal->extended_entities->media[0]->video_info->variants[0];
+        dd($video->url);
+
     }
 }

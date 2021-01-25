@@ -9,15 +9,15 @@ class MessageService extends AbstractAuth
      * @var integer
      */
     const MAX_TWEET = 20;
-    
+
     /**
      * Search url
      * @var string
      */
     private $searchUrl = 'search/tweets';
-    
+
     private $showUrl = 'statuses/show';
-    
+
     private $retweetUrl = 'statuses/retweets';
 
     /**
@@ -28,7 +28,7 @@ class MessageService extends AbstractAuth
     public function search(array $keywords = [], array $options = [])
     {
         try {
-            
+
             $options = array_merge($this->generateDefaultOption(), $options);
             $options['q'] = implode(' ', $keywords);
             $result = $this->client->get($this->searchUrl, $options);
@@ -39,11 +39,11 @@ class MessageService extends AbstractAuth
         } catch (\Exception $e) {
             echo 'Un problème est survenu : ' . $e->getMessage();
         }
-        
+
     }
 
     /**
-     * 
+     *
      * @param int $id
      * @param array $options
      */
@@ -56,7 +56,7 @@ class MessageService extends AbstractAuth
             if (!empty($result->errors)) {
                 $this->handleError($result->errors);
             }
-            dd($result);
+            return $result;
         } catch (\Exception $e) {
             echo 'Un problème est survenu : ' . $e->getMessage();
         }
