@@ -47,6 +47,11 @@ class Media
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $capture;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,5 +124,17 @@ class Media
     public function onPrePersist()
     {
         $this->createdAt = new \DateTime();
+    }
+
+    public function getCapture(): ?string
+    {
+        return $this->capture;
+    }
+
+    public function setCapture(?string $capture): self
+    {
+        $this->capture = $capture;
+
+        return $this;
     }
 }

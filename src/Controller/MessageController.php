@@ -77,7 +77,6 @@ class MessageController extends AbstractController
 
             $media         = new Media();
             $tweetOriginal = $messageService->getOneById($mentionMessage->in_reply_to_status_id);
-
             if (isset($tweetOriginal->extended_entities) && !$mediaRepository->tweetExist($mentionMessage->id)) {
                 if (!isset($tweetOriginal->extended_entities->media[0]->video_info)) {
                     $media->setUrl($tweetOriginal
@@ -94,6 +93,10 @@ class MessageController extends AbstractController
                         ->variants[0];
                     $media->setUrl($video->url);
                 }
+                    $media->setCapture($tweetOriginal
+                        ->extended_entities
+                        ->media[0]
+                        ->media_url_https);
                     $media->setTweetIdentifier($mentionMessage->id);
                     $media->setTwitterUser($twitterUser);
                     $entityManager->persist($twitterUser);
