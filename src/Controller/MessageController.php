@@ -102,7 +102,5 @@ class MessageController extends AbstractController
         }
         $entityManager->flush();
         dd('ok');
-        //TODO Vérifier si l utilisateur existe, si oui, ajouter le media à cet user.
-        //TODO Vérifier que le tweetidentifier n existe pas déjà avant de persist (avec un findby dans le repository qui retourne true ou false
     }
 }
