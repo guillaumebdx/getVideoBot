@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Last media{% endblock %}
+
+{% block body %}
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                {% for medium in media %}
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <a class="btn btn-primary" href="{{ medium.url }}">
+                                <img class="card-img-top" src="{{ medium.capture }}" alt="Capture">
+                            </a>
+                            <div class="card-body">
+                                <a class="btn-primary btn" href="https://twitter.com/{{ medium.twitterUser.username }}">
+                                    @{{ medium.twitterUser.username }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
