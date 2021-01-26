@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TwitterUserRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class TwitterUser
 {
@@ -27,6 +28,11 @@ class TwitterUser
      * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="twitterUser", orphanRemoval=true)
      */
     private $media;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
     public function __construct()
     {
@@ -79,5 +85,26 @@ class TwitterUser
         }
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Gets triggered only on insert
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->createdAt = new \DateTime();
     }
 }

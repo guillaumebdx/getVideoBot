@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Media;
 use App\Entity\TwitterUser;
+use App\Repository\MediaRepository;
+use App\Repository\TwitterUserRepository;
 use App\Service\MentionManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -59,16 +61,24 @@ class MessageController extends AbstractController
      */
     public function getMentions(MentionManager $mentionManager,
                                 MessageService $messageService,
-                                EntityManagerInterface $entityManager)
+                                EntityManagerInterface $entityManager,
+                                TwitterUserRepository $twitterUserRepository,
+                                MediaRepository $mediaRepository)
     {
         foreach ($mentionManager->getMentions() as $mention) {
             $mentionMessage = $messageService->getOneById($mention->id);
-            $twitterUser    = new TwitterUser();
-            $twitterUser->setUsername($mentionMessage->user->screen_name);
+            $username = $mentionMessage->user->screen_name;
+            if ($twitterUserRepository->userExist($username)) {
+                $twitterUser = $twitterUserRepository->findOneBy(['username' => $username]);
+            } else {
+                $twitterUser    = new TwitterUser();
+                $twitterUser->setUsername($mentionMessage->user->screen_name);
+            }
+
             $media         = new Media();
             $tweetOriginal = $messageService->getOneById($mentionMessage->in_reply_to_status_id);
 
-            if (isset($tweetOriginal->extended_entities)) {
+            if (isset($tweetOriginal->extended_entities) && !$mediaRepository->tweetExist($mentionMessage->id)) {
                 if (!isset($tweetOriginal->extended_entities->media[0]->video_info)) {
                     $media->setUrl($tweetOriginal
                         ->extended_entities
@@ -92,5 +102,7 @@ class MessageController extends AbstractController
         }
         $entityManager->flush();
         dd('ok');
+        //TODO Vérifier si l utilisateur existe, si oui, ajouter le media à cet user.
+        //TODO Vérifier que le tweetidentifier n existe pas déjà avant de persist (avec un findby dans le repository qui retourne true ou false
     }
 }

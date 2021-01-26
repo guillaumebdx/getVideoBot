@@ -19,6 +19,10 @@ class MediaRepository extends ServiceEntityRepository
         parent::__construct($registry, Media::class);
     }
 
+    public function tweetExist(string $tweetIdentifier)
+    {
+        return (bool)$this->findOneBy(['tweetIdentifier' => $tweetIdentifier]);
+    }
     // /**
     //  * @return Media[] Returns an array of Media objects
     //  */

@@ -19,6 +19,10 @@ class TwitterUserRepository extends ServiceEntityRepository
         parent::__construct($registry, TwitterUser::class);
     }
 
+    public function userExist(string $username)
+    {
+        return (bool)$this->findOneBy(['username' => $username]);
+    }
     // /**
     //  * @return TwitterUser[] Returns an array of TwitterUser objects
     //  */
