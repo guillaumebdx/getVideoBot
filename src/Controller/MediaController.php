@@ -18,7 +18,7 @@ class MediaController extends AbstractController
     public function index(MediaRepository $mediaRepository)
     {
         return $this->render('media/index.html.twig', [
-            'media' => $mediaRepository->findBy([], ['id' => 'DESC'],10),
+            'media' => $mediaRepository->findBy([], ['id' => 'DESC'],12),
             'by_user' => false,
         ]);
     }
