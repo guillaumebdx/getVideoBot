@@ -6,7 +6,7 @@ namespace App\Service;
 
 class AnswerService extends AbstractAuth
 {
-    const URL = 'http://127.0.0.1:8000/';
+    const URL = 'https://savethismedia.com/';
 
     private $statusUrl = 'statuses/update';
 
