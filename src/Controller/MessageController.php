@@ -6,6 +6,7 @@ use App\Entity\Media;
 use App\Entity\TwitterUser;
 use App\Repository\MediaRepository;
 use App\Repository\TwitterUserRepository;
+use App\Service\AnswerService;
 use App\Service\MentionManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -99,9 +100,27 @@ class MessageController extends AbstractController
                         ->media_url_https);
                     $media->setTweetIdentifier($mentionMessage->id);
                     $media->setTwitterUser($twitterUser);
+                    $media->setIsAnswered(false);
                     $entityManager->persist($twitterUser);
                     $entityManager->persist($media);
             }
+        }
+        $entityManager->flush();
+        dd('ok');
+    }
+
+    /**
+     * @Route("/answer", name="answer")
+     */
+    public function giveAnswer(MediaRepository $mediaRepository,
+                               AnswerService $answerService,
+                               EntityManagerInterface $entityManager
+    )
+    {
+        $media = $mediaRepository->findBy(['isAnswered' => false], null, 2);
+        foreach ($media as $medium) {
+            $answerService->sendMessage($medium->getTweetIdentifier(), $medium->getTwitterUser()->getUsername());
+            $medium->setIsAnswered(true);
         }
         $entityManager->flush();
         dd('ok');

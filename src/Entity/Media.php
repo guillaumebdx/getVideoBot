@@ -52,6 +52,11 @@ class Media
      */
     private $capture;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAnswered;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -134,6 +139,18 @@ class Media
     public function setCapture(?string $capture): self
     {
         $this->capture = $capture;
+
+        return $this;
+    }
+
+    public function getIsAnswered(): ?bool
+    {
+        return $this->isAnswered;
+    }
+
+    public function setIsAnswered(bool $isAnswered): self
+    {
+        $this->isAnswered = $isAnswered;
 
         return $this;
     }

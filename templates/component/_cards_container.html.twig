@@ -1,0 +1,25 @@
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for medium in media %}
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <a class="btn" href="{{ medium.url }}">
+                            <img class="card-img-top" src="{{ medium.capture }}" alt="Capture">
+                        </a>
+                        <div class="card-body">
+                            <a class="btn-primary btn" target="_blank" href="https://twitter.com/{{ medium.twitterUser.username }}">
+                                @{{ medium.twitterUser.username }}
+                            </a>
+                            {% if (by_user == false) %}
+                            <a class="btn-outline-primary btn" href="{{ path('media_user', {username: medium.twitterUser.username}) }}">
+                                {{ medium.twitterUser.username }} media
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
