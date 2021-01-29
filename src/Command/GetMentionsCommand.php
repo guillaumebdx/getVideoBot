@@ -53,42 +53,46 @@ class GetMentionsCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         foreach ($this->mentionManager->getMentions() as $mention) {
-            $mentionMessage = $this->messageService->getOneById($mention->id);
-            $username = $mentionMessage->user->screen_name;
-            if ($this->twitterUserRepository->userExist($username)) {
-                $twitterUser = $this->twitterUserRepository->findOneBy(['username' => $username]);
-            } else {
-                $twitterUser    = new TwitterUser();
-                $twitterUser->setUsername($mentionMessage->user->screen_name);
-            }
+            if ($mention->id !== null) {
+                $mentionMessage = $this->messageService->getOneById($mention->id);
+                if ($mentionMessage->in_reply_to_status_id !== null) {
+                    $username = $mentionMessage->user->screen_name;
+                    if ($this->twitterUserRepository->userExist($username)) {
+                        $twitterUser = $this->twitterUserRepository->findOneBy(['username' => $username]);
+                    } else {
+                        $twitterUser = new TwitterUser();
+                        $twitterUser->setUsername($mentionMessage->user->screen_name);
+                    }
 
-            $media         = new Media();
-            $tweetOriginal = $this->messageService->getOneById($mentionMessage->in_reply_to_status_id);
-            if (isset($tweetOriginal->extended_entities) && !$this->mediaRepository->tweetExist($mentionMessage->id)) {
-                if (!isset($tweetOriginal->extended_entities->media[0]->video_info)) {
-                    $media->setUrl($tweetOriginal
-                        ->extended_entities
-                        ->media[0]
-                        ->media_url_https);
-                    $media->setType(Media::TYPE_IMAGE);
-                } else {
-                    $media->setType(Media::TYPE_VIDEO);
-                    $video = $tweetOriginal
-                        ->extended_entities
-                        ->media[0]
-                        ->video_info
-                        ->variants[0];
-                    $media->setUrl($video->url);
+                    $media = new Media();
+                    $tweetOriginal = $this->messageService->getOneById($mentionMessage->in_reply_to_status_id);
+                    if (isset($tweetOriginal->extended_entities) && !$this->mediaRepository->tweetExist($mentionMessage->id)) {
+                        if (!isset($tweetOriginal->extended_entities->media[0]->video_info)) {
+                            $media->setUrl($tweetOriginal
+                                ->extended_entities
+                                ->media[0]
+                                ->media_url_https);
+                            $media->setType(Media::TYPE_IMAGE);
+                        } else {
+                            $media->setType(Media::TYPE_VIDEO);
+                            $video = $tweetOriginal
+                                ->extended_entities
+                                ->media[0]
+                                ->video_info
+                                ->variants[0];
+                            $media->setUrl($video->url);
+                        }
+                        $media->setCapture($tweetOriginal
+                            ->extended_entities
+                            ->media[0]
+                            ->media_url_https);
+                        $media->setTweetIdentifier($mentionMessage->id);
+                        $media->setTwitterUser($twitterUser);
+                        $media->setIsAnswered(false);
+                        $this->entityManager->persist($twitterUser);
+                        $this->entityManager->persist($media);
+                    }
                 }
-                $media->setCapture($tweetOriginal
-                    ->extended_entities
-                    ->media[0]
-                    ->media_url_https);
-                $media->setTweetIdentifier($mentionMessage->id);
-                $media->setTwitterUser($twitterUser);
-                $media->setIsAnswered(false);
-                $this->entityManager->persist($twitterUser);
-                $this->entityManager->persist($media);
             }
         }
         $this->entityManager->flush();
