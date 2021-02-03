@@ -16,7 +16,7 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/contact", name="contact")
+     * @Route("/home/contact", name="contact")
      */
     public function contact()
     {

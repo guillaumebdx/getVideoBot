@@ -6,7 +6,7 @@ namespace App\Service;
 
 class AnswerService extends AbstractAuth
 {
-    const URL = 'https://savethismedia.com/media/user/';
+    const URL = 'https://savethismedia.com/';
 
     private $statusUrl = 'statuses/update';
 
@@ -14,11 +14,16 @@ class AnswerService extends AbstractAuth
     {
 
         $messages = [
-            'Ok ' . $username . 'you will find your video on this url : ' . self::URL . $username,
-            'Your media has just been downloaded here : ' . self::URL . $username,
-            'GG ' . $username . ' you have a new media on your page : ' . self::URL . $username,
-            'I did it for you my dear ' . $username . ', here is your precious media : ' . self::URL . $username,
-            'Check your media on this url and don\'t forget to follow me ! : ' . self::URL . $username,
+            'Ok ' . $username . ' tu trouveras ton fichier tout beau tout propre ici : ' . self::URL . $username,
+            'Wsh, ton fichier a bien été téléchargé ici ' . self::URL . $username,
+            'GG ' . $username . ' t\'as un nouveau média dans ton espace : ' . self::URL . $username,
+            'J\'ai bien pris en compte tes doléances frérot. En gros, ' . $username . ', ton fichier est là : ' . self::URL . $username,
+            'Ok j\'ai posé ça ici, et oublie pas de me follow frérot : ' . self::URL . $username,
+            'J\'ai fais un lien rien que pour toi bg : ' . self::URL . $username,
+            'Ok bg/blg ton média est ici : ' . self::URL . $username,
+            'T\'as tout compris frr, tu me mentiones, je te mets ça au chaud : ' . self::URL . $username,
+            'Voici ton lien bg : ' . self::URL . $username,
+            'Avoue je te met bien avec un lien tout neuf pour toi : ' . self::URL . $username,
         ];
         return $messages[array_rand($messages)];
     }

@@ -7,13 +7,11 @@ use App\Repository\TwitterUserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/media", name="media_")
- */
+
 class MediaController extends AbstractController
 {
     /**
-     * @Route("/last", name="last")
+     * @Route("/media/last", name="media_last")
      */
     public function index(MediaRepository $mediaRepository)
     {
@@ -24,7 +22,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/user/{username}", name="user")
+     * @Route("/{username}", name="media_user")
      */
     public function byUser(string $username,
                            MediaRepository $mediaRepository,
