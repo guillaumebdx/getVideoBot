@@ -10,10 +10,7 @@
                 <a class="nav-link" href="{{ path('media_last') }}">Dernières sauvegardes</a>
                 <a class="nav-link" href="{{ path('contact') }}">Contact</a>
             </div>
-            <form class="form-inline my-2 my-lg-0" action="{{ path('search') }}">
-                <input required name="pseudo" class="form-control mr-sm-2" type="search" placeholder="Votre pseudo twitter" aria-label="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Rechercher</button>
-            </form>
+            {% include 'component/_search.html.twig' %}
         </div>
     </div>
 </nav>

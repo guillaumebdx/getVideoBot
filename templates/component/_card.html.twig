@@ -1,0 +1,23 @@
+<div class="col">
+    <div class="card shadow-sm">
+        <a class="btn" href="{{ medium.url }}">
+            {% if medium.type == 'video' %}
+                <i class="far fa-play-circle"></i>
+            {% endif %}
+            <img class="card-img-top" src="{{ medium.capture }}" alt="Capture">
+        </a>
+        <div class="card-body">
+            <a class="btn-primary btn" target="_blank" href="https://twitter.com/{{ medium.twitterUser.username }}">
+                <i class="fab fa-twitter"></i>
+            </a>
+            {% if (by_user == false) %}
+                <a class="btn-outline-primary btn" href="{{ path('media_user', {username: medium.twitterUser.username}) }}">
+                    {{ medium.twitterUser.username }} media
+                </a>
+            {% endif %}
+            <a class="btn-primary btn" href="{{ medium.url }}" download="SauvegardeRobot" target="_blank">
+                <i class="fas fa-download"></i>
+            </a>
+        </div>
+    </div>
+</div>
