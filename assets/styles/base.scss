@@ -6,10 +6,13 @@
     height: auto;
     width: auto;
   }
+  .card {
+    height: 100%;
+  }
 }
 .far.fa-play-circle {
   position: absolute;
-  top: 25%;
+  top: 14%;
   left: 44%;
   font-size: 50px;
   color: white;

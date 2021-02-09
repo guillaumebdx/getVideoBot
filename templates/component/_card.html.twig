@@ -14,10 +14,20 @@
                 <a class="btn-outline-primary btn" href="{{ path('media_user', {username: medium.twitterUser.username}) }}">
                     {{ medium.twitterUser.username }} media
                 </a>
-            {% endif %}
-            <a class="btn-primary btn" href="{{ medium.url }}" download="SauvegardeRobot" target="_blank">
-                <i class="fas fa-download"></i>
-            </a>
+            {% endif %}<br><br>
+            <ul class="list-group">
+                {% for video in medium.videos %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a class="btn-primary btn" href="{{ video.url }}" download="SauvegardeRobot" target="_blank">
+                            <i class="fas fa-download"></i> {{ video.type }}
+                        </a>
+                        {% if video.bitrate %}
+                            <span class="badge badge-primary badge-pill">Bitrate : {{ video.bitrate }}</span>
+                        {% endif %}
+                    </li>
+
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>

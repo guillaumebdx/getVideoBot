@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Media;
 use App\Entity\TwitterUser;
+use App\Entity\Video;
 use App\Repository\MediaRepository;
 use App\Repository\TwitterUserRepository;
 use App\Service\MentionManager;
@@ -82,6 +83,21 @@ class GetMentionsCommand extends Command
                                 ->video_info
                                 ->variants[0];
                             $media->setUrl($video->url);
+                            $variants = $tweetOriginal
+                                ->extended_entities
+                                ->media[0]
+                                ->video_info
+                                ->variants;
+                            foreach ($variants as $variant) {
+                                $video = new Video();
+                                $video->setUrl($variant->url);
+                                $video->setType($variant->content_type);
+                                if (isset($variant->bitrate)) {
+                                    $video->setBitrate($variant->bitrate);
+                                }
+                                $video->setMedia($media);
+                                $this->entityManager->persist($video);
+                            }
                         }
                         $media->setCapture($tweetOriginal
                             ->extended_entities
