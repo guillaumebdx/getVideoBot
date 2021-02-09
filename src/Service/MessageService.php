@@ -62,6 +62,21 @@ class MessageService extends AbstractAuth
         }
     }
 
+    public function ddById(int $id, array $options = [])
+    {
+        try {
+            $options['id']         = $id;
+            $options['tweet_mode'] = 'extended';
+            $result = $this->client->get($this->showUrl, $options);
+            if (!empty($result->errors)) {
+                $this->handleError($result->errors);
+            }
+            dd($result);
+        } catch (\Exception $e) {
+            echo 'Un problème est survenu : ' . $e->getMessage();
+        }
+    }
+
     public function getRetweetsById(int $id, array $options = [])
     {
         try {

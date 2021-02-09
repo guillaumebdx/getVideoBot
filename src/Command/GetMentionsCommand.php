@@ -75,6 +75,7 @@ class GetMentionsCommand extends Command
                             $media->setType(Media::TYPE_IMAGE);
                         } else {
                             $media->setType(Media::TYPE_VIDEO);
+
                             $video = $tweetOriginal
                                 ->extended_entities
                                 ->media[0]
