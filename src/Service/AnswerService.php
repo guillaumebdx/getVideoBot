@@ -13,7 +13,7 @@ class AnswerService extends AbstractAuth
     private function generateMessage($username)
     {
 
-        /*$messages = [
+        $messages = [
             'Ok ' . $username . ' tu trouveras ton fichier tout beau tout propre ici : ' . self::URL . $username,
             'Wsh, ton fichier a bien été téléchargé ici ' . self::URL . $username,
             'GG ' . $username . ' t\'as un nouveau média dans ton espace : ' . self::URL . $username,
@@ -24,8 +24,8 @@ class AnswerService extends AbstractAuth
             'T\'as tout compris frr, tu me mentiones, je te mets ça au chaud : ' . self::URL . $username,
             'Voici ton lien bg : ' . self::URL . $username,
             'Avoue je te met bien avec un lien tout neuf pour toi : ' . self::URL . $username,
-        ];*/
-
+        ];
+        /*
         $messages = [
             'Ok ' . $username . ' tu trouveras ton fichier tout beau tout propre en suivant les consignes sur mon tweet épinglé',
             'Wsh ' . $username . ', ton fichier a bien été téléchargé. Suis les consignes sur mon tweet épinglé',
@@ -37,6 +37,7 @@ class AnswerService extends AbstractAuth
             'Salut ' . $username . ' ! T\'as tout compris frr, tu me mentiones, je te mets ça au chaud. Pour y accéder, va voir mon tweet épinglé',
             'Avoue ' . $username . ' je te met bien avec le fichier tout neuf pour toi : Va voir mon tweet épinglé pour le récupérer',
         ];
+        */
         return $messages[array_rand($messages)];
     }
 
