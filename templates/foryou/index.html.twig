@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ForYou{% endblock %}
+
+{% block body %}
+    {% for medium in media %}
+        {% if medium.videos[0].bitrate %}
+        <video controls width="800">
+            <source src="{{ medium.videos[0].url }}" type="video/mp4">
+        </video>
+            {{ medium.id }}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
